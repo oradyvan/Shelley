@@ -29,7 +29,12 @@ static NSString *const registeredName = @"shelley_compat";
 
 - (NSArray *) selectViewsWithSelector:(NSString *)selector {
     NSLog( @"Using %s to select views with selector: %@", VERSIONED_NAME, selector );
-    
+
+    if (!self.application) {
+        [NSException raise:@"unknown application"
+                    format:@"no application wrapper set for %s engine that could provide array of windows to select views with selector \"%@\"", VERSIONED_NAME, selector];
+    }
+
     Shelley *shelley = [Shelley withSelectorString:selector];
 
     return [shelley selectFromViews:[self.application windows]];
